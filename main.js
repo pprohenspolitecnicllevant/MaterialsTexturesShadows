@@ -23,22 +23,37 @@ const roughFabric = "textures/fabric/textures/fabric_pattern_07_rough_1k.jpg"
 
 const albedoMud = "textures/mud/textures/brown_mud_leaves_01_diff_1k.jpg"
 const normalMud = "textures/mud/textures/brown_mud_leaves_01_nor_gl_1k.jpg"
-const roughMud = "textures/mud/textures/brown_mud_leaves_01_rough_1k.jpg"
+//const roughMud = "textures/mud/textures/brown_mud_leaves_01_rough_1k.jpg"
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-//const albedoTexture = textureLoader.load(albedoMud)
-//const normalTexture = textureLoader.load(normalMud)
+const albedoTexture = textureLoader.load(albedoMud)
+const normalTexture = textureLoader.load(normalMud)
 //const roughTexture = textureLoader.load(roughMud)
 
-const cubMat = new THREE.MeshBasicMaterial({
-  color: 0xff0000
-  //map: albedoTexture,
-  //normalMap: normalTexture,
-  //roughnessMap: roughTexture
+const cubMat = new THREE.MeshStandardMaterial({
+  map: albedoTexture,
+  normalMap: normalTexture,
+  //bumpMap: roughTexture
 })
 const cubito = new THREE.Mesh(cubeGeometry, cubMat)
+cubito.castShadow = true
 scene.add(cubito)
 objects.push(cubito)
+
+////////ENTORN/////////////////
+const cubeTextureLoader = new THREE.CubeTextureLoader()
+const environmentMap = cubeTextureLoader.load([
+  'textures/environmentMaps/sky/px.png',
+  'textures/environmentMaps/sky/nx.png',
+  'textures/environmentMaps/sky/py.png',
+  'textures/environmentMaps/sky/ny.png',
+  'textures/environmentMaps/sky/pz.png',
+  'textures/environmentMaps/sky/nz.png'
+])
+
+scene.background = environmentMap
+///////////////////////////////
+
 
 // ////////////////////////////////////////////////
 // // assync loading de texture i generació del cub
@@ -107,6 +122,7 @@ function setupScene() {
 
   renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.shadowMap.enabled=true
   document.body.appendChild(renderer.domElement)
 
   //controls
@@ -114,23 +130,26 @@ function setupScene() {
   controls.enableDamping = true
 
   //directional light
-  // const dirlight = new THREE.DirectionalLight(0xffffff);
-  // dirlight.position.set(-1, 4, 1);
-  // scene.add(dirlight);
+  const dirlight = new THREE.DirectionalLight(0xffffff, 2);
+  dirlight.castShadow = true
+  dirlight.position.set(-1, 4, 1);
+  scene.add(dirlight);
 
   //spotlight
-  // const spotLight = new THREE.SpotLight(0xffffff, 20, 40, Math.PI/8)
-  // spotLight.position.set(-5, 4, 1)
-  // scene.add(spotLight)
+  const spotLight = new THREE.SpotLight(0xffffff, 20, 40, Math.PI/8)
+  spotLight.position.set(-5, 4, 1)
+  spotLight.castShadow=true
+  scene.add(spotLight)
 
 
   //plane
-  // const planeGeo = new THREE.PlaneGeometry(10, 10)
-  // const planeMat = new THREE.MeshStandardMaterial({
-  //   color: 0xffffff
-  // })
-  // const plane = new THREE.Mesh(planeGeo, planeMat)
-  // plane.position.y = -1
-  // plane.rotation.x = Math.PI * -0.5
-  // scene.add(plane)
+  const planeGeo = new THREE.PlaneGeometry(10, 10)
+  const planeMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff
+  })
+  const plane = new THREE.Mesh(planeGeo, planeMat)
+  plane.receiveShadow= true
+  plane.position.y = -1
+  plane.rotation.x = Math.PI * -0.5
+  scene.add(plane)
 }
