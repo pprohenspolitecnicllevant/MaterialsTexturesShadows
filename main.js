@@ -17,28 +17,51 @@ const objects = [];
 
 setupScene()
 
-const albedoFabric = "textures/fabric/textures/fabric_pattern_07_col_1_1k.jpg"
-const normalFabric = "textures/fabric/textures/fabric_pattern_07_nor_gl_1k.jpg"
-const roughFabric = "textures/fabric/textures/fabric_pattern_07_rough_1k.jpg"
+const albedoRock = "textures/rockwall/rock_wall_11_diff_2k.jpg"
+const normalRock = "textures/rockwall/rock_wall_11_nor_gl_2k.jpg"
+const armRock = "textures/rockwall/rock_wall_11_arm_2k.jpg"
+const dispRock = "textures/rockwall/rock_wall_11_disp_2k.png"
+
+const albedoRockTexture = textureLoader.load(albedoRock)
+const normalRockTexture = textureLoader.load(normalRock)
+const armRockTexture = textureLoader.load(armRock)
+const dispRockTexture = textureLoader.load(dispRock)
 
 const albedoMud = "textures/mud/textures/brown_mud_leaves_01_diff_1k.jpg"
 const normalMud = "textures/mud/textures/brown_mud_leaves_01_nor_gl_1k.jpg"
-//const roughMud = "textures/mud/textures/brown_mud_leaves_01_rough_1k.jpg"
+const roughMud = "textures/mud/textures/brown_mud_leaves_01_rough_1k.jpg"
 
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-const albedoTexture = textureLoader.load(albedoMud)
-const normalTexture = textureLoader.load(normalMud)
-//const roughTexture = textureLoader.load(roughMud)
+const albedoMudTexture = textureLoader.load(albedoMud)
+const normalMudTexture = textureLoader.load(normalMud)
+const roughMudTexture = textureLoader.load(roughMud)
 
-const cubMat = new THREE.MeshStandardMaterial({
-  map: albedoTexture,
-  normalMap: normalTexture,
-  //bumpMap: roughTexture
+//plane
+const planeGeo = new THREE.PlaneGeometry(10, 10)
+const planeMat = new THREE.MeshStandardMaterial({
+  map: albedoMudTexture,
+  normalMap: normalMudTexture,
+  roughnessMap: roughMudTexture,
 })
-const cubito = new THREE.Mesh(cubeGeometry, cubMat)
-cubito.castShadow = true
-scene.add(cubito)
-objects.push(cubito)
+const plane = new THREE.Mesh(planeGeo, planeMat)
+plane.receiveShadow= true
+plane.position.y = -1
+plane.rotation.x = Math.PI * -0.5
+scene.add(plane)
+
+const sphereGeo = new THREE.SphereGeometry(1)
+const sphereMAT = new THREE.MeshStandardMaterial({
+  map: albedoRockTexture,
+  normalMap: normalRockTexture,
+  aoMap: armRockTexture,
+  displacementMap:  dispRockTexture,
+  displacementScale: 0.6
+})
+
+const bolla = new THREE.Mesh(sphereGeo, sphereMAT)
+bolla.castShadow = true
+bolla.position.y = 1
+scene.add(bolla)
+objects.push(bolla)
 
 ////////ENTORN/////////////////
 const cubeTextureLoader = new THREE.CubeTextureLoader()
@@ -117,7 +140,7 @@ function setupScene() {
     0.1,
     1000
   )
-  camera.position.set(0, 1, 1)
+  camera.position.set(0, 4, 4)
   camera.lookAt(0, 0, 0)
 
   renderer = new THREE.WebGLRenderer()
@@ -132,24 +155,15 @@ function setupScene() {
   //directional light
   const dirlight = new THREE.DirectionalLight(0xffffff, 2);
   dirlight.castShadow = true
-  dirlight.position.set(-1, 4, 1);
+  dirlight.position.set(4, 4, 1);
   scene.add(dirlight);
 
   //spotlight
-  const spotLight = new THREE.SpotLight(0xffffff, 20, 40, Math.PI/8)
-  spotLight.position.set(-5, 4, 1)
-  spotLight.castShadow=true
-  scene.add(spotLight)
+  // const spotLight = new THREE.SpotLight(0xffffff, 20, 40, Math.PI/8)
+  // spotLight.position.set(-5, 4, 1)
+  // spotLight.castShadow=true
+  // scene.add(spotLight)
 
 
-  //plane
-  const planeGeo = new THREE.PlaneGeometry(10, 10)
-  const planeMat = new THREE.MeshStandardMaterial({
-    color: 0xffffff
-  })
-  const plane = new THREE.Mesh(planeGeo, planeMat)
-  plane.receiveShadow= true
-  plane.position.y = -1
-  plane.rotation.x = Math.PI * -0.5
-  scene.add(plane)
+  
 }
