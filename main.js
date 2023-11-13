@@ -4,6 +4,11 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import gsap from "gsap";
 import "./style.css";
 
+import Cosa from './src/Cosa.js'
+
+import mirlo from './src/img/rock_wall_11_diff_2k.jpg'
+
+const cosa = new Cosa()
 // Declaració d'elements principals
 //Loader de models GLTF
 let loader = null;
@@ -18,7 +23,7 @@ const objects = [];
 
 setupScene();
 
-const albedoRock = "textures/rockwall/rock_wall_11_diff_2k.jpg";
+const albedoRock = mirlo;
 const normalRock = "textures/rockwall/rock_wall_11_nor_gl_2k.jpg";
 const armRock = "textures/rockwall/rock_wall_11_arm_2k.jpg";
 const dispRock = "textures/rockwall/rock_wall_11_disp_2k.png";
